@@ -2,8 +2,8 @@ import argparse
 from pathlib import Path
 
 from pcb_reference import ROOT
-from pcb_reference.dataset import prepare
-from pcb_reference.inputs import ARMS
+from pcb_reference.data.export import prepare
+from pcb_reference.methods import ARMS
 
 
 if __name__ == "__main__":

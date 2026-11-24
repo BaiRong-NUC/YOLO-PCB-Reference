@@ -1,0 +1,44 @@
+{
+  "ring": {
+    "images": 500,
+    "small_gt": 643,
+    "delta_fp_image": 0.022,
+    "fp_ci": [
+      -0.016,
+      0.06
+    ],
+    "delta_small_recall": 0.012441679626749611,
+    "small_recall_ci": [
+      0.0,
+      0.0259551906062516
+    ]
+  },
+  "solid": {
+    "images": 500,
+    "small_gt": 643,
+    "delta_fp_image": 0.012,
+    "fp_ci": [
+      -0.026049999999999997,
+      0.05
+    ],
+    "delta_small_recall": 0.017107309486780714,
+    "small_recall_ci": [
+      0.006086448999210355,
+      0.030161131331513484
+    ]
+  },
+  "raw": {
+    "images": 500,
+    "small_gt": 643,
+    "delta_fp_image": 0.142,
+    "fp_ci": [
+      0.08,
+      0.208
+    ],
+    "delta_small_recall": -0.01088646967340591,
+    "small_recall_ci": [
+      -0.02898612553791364,
+      0.007614492568368853
+    ]
+  }
+}

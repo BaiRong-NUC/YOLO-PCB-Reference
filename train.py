@@ -1,6 +1,6 @@
 import argparse
 
-from pcb_reference.inputs import ARMS
+from pcb_reference.methods import ARMS
 from pcb_reference.training import train
 
 

@@ -4,9 +4,9 @@ from collections import defaultdict
 import cv2
 import numpy as np
 
-from .deeppcb import iter_samples, read_boxes
-from .inputs import make_input
-from .registration import translate
+from ..data.deeppcb import iter_samples, read_boxes
+from ..methods import make_input
+from ..methods.aligned.registration import translate
 
 
 def measure(source, output):

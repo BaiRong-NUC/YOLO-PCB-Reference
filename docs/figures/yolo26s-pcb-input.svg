@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1536" height="932" viewBox="0 0 1536 932" role="img" aria-labelledby="title desc">
+<title id="title">PCB 缺陷检测的 YOLO26s 输入改进与实测结果</title>
+<desc id="desc">双图实验仅替换进入检测器的第三通道。相较直接差分，全局校正在模板右移两像素时减少175个误报，进一步使用环形判据则比全局校正多136个误报。</desc>
+<defs><marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#62808a"/></marker></defs>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif">
+<rect x="0" y="0" width="1536" height="932" rx="0" fill="#fafbf8" stroke="none" stroke-width="1"/>
+<rect x="0" y="0" width="1536" height="106" rx="0" fill="#17303b" stroke="none" stroke-width="1"/>
+<text x="42" y="53" font-size="38" font-weight="700" text-anchor="start" fill="#ffffff">PCB 缺陷检测：YOLO26s 的改动在输入端</text>
+<text x="44" y="85" font-size="20" font-weight="400" text-anchor="start" fill="#d5e6e5">当正常模板与待检图错开时，怎样计算差分，才能减少线路边缘的误报？</text>
+<text x="1490" y="54" font-size="26" font-weight="700" text-anchor="end" fill="#ffffff">DeepPCB</text>
+<text x="1490" y="81" font-size="17" font-weight="400" text-anchor="end" fill="#c2d6d6">六类水平框检测</text>
+<text x="42" y="155" font-size="24" font-weight="700" text-anchor="start" fill="#192e3c">配对输入</text>
+<text x="290" y="155" font-size="24" font-weight="700" text-anchor="start" fill="#192e3c">第三通道的三种做法</text>
+<text x="878" y="155" font-size="24" font-weight="700" text-anchor="start" fill="#192e3c">组合输入</text>
+<text x="1140" y="155" font-size="24" font-weight="700" text-anchor="start" fill="#192e3c">YOLO26s 检测器</text>
+<path d="M42 171 H1492" fill="none" stroke="#d4deda" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="811" y="155" font-size="17" font-weight="400" text-anchor="end" fill="#48606b">每组选一种</text>
+<rect x="42" y="212" width="203" height="278" rx="8" fill="#ffffff" stroke="#c1cece" stroke-width="1"/>
+<image x="57" y="230" width="78" height="78" xlink:href="data:image/png;base64,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"/>
+<rect x="57" y="230" width="78" height="78" rx="0" fill="none" stroke="#97a8ad" stroke-width="1"/>
+<text x="147" y="260" font-size="19" font-weight="700" text-anchor="start" fill="#192e3c">待检图</text>
+<text x="148" y="286" font-size="19" font-weight="400" text-anchor="start" fill="#48606b">I</text>
+<path d="M57 323 H230" fill="none" stroke="#e0e7e6" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<image x="57" y="341" width="78" height="78" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAAAAADji6uXAAADrElEQVRoBb3BC24kyREFQffIIha6/2ElbFfG0wznJxQT5LbQWWaGexnuZbiX4V6GexnuZbiX4V6GexnuZbiX4V6GexnuZbiX4V6GexnuZbiX4V6GexnuZbiX4V6GexnuZXixSCTGpPjA8Fpdc9AFQejiwvBS50HsgtjVxQeGlzsPiE3xeOPK8FodK8jjDSIfGF4qkh5B4Dw4Dy4MLxURjpM83uA8uDK8lGNaEwhd0MWF4Skxwhx810Ukxi6IyB+JLBie83ibgy7Oo4vgeTALRjhODL8lsmB4SlckhOoCIl1g0UabPxJZMDylC7ogclbKSIVvDFDNb4ksGJ4VW2QO6BqNpiYjPSb/I5EFw3O6OA8I9sBUG+A4+caMyS+JLBieM0sItgVvD6rHlMBxjg5/JLJgeEqkixRjjo7YBgzVY1LNb4ksGL4SicQ5mKMLKvwDiSwYPhWB2NQcQBdWa/OlRBYMn+uKEIlExJSTryWyYPjcHHMQu48oxoxJNV9KZMHwqS4IdhFHY6qlpuEriSwYPtci50EF3h5ITcDwlUQWDJ+bAzQGxykERtfkS4ksGD7VZbWEojEwOgbDVxJZMLyLEeaIXUDsgi6oUI3hWYksGH54vM1B1xwk1QVd51+NBKzJ0xJZMLzrioQUkTm6wOoxgeOkmqclsmB41wVdwFkFrRUMo7EN/4dEFgy/xBYJcRDGrOa7aqjmWYksGH7o4jyAOayGMflmzArBVPOsRBYMP8wSgoymGsbEjEk1Y749eFoiC4Z3kS5Skkp4ZzBjgjE8K5EF2zmYgxjF8BomcB58YOYAumYdjeFl0kUXVyYSmf868/bgZezgLLnycURxnHxXzYskRs6DCxNHYyrB8DqJRK408PYAQ3U1r3L8ZwT5QHCckkp4qRCcgwuLxlANpppXcQqRK9mkTomRC9nkHBD5QPawIzFyIZvYdNHFhexh/V0kxZXsEqCLK9lDzxSRK9nEKUSuZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZJdEFmSXRBZkl0QWZI8xQysfyC6zIMiF7DLOrjm4km3OQRdXsoep9HlELmQXQ4hcyCZjgv/+iyvZpprwgexhqMYGulr5RTYZHZBpnCMpfpJNqjlOqL81xR+yjamQmjBH5CfZoxqqAZMuuvhJ9qg2iE6dnAe//Bc7HjYf9QCUaAAAAABJRU5ErkJggg=="/>
+<rect x="57" y="341" width="78" height="78" rx="0" fill="none" stroke="#97a8ad" stroke-width="1"/>
+<text x="147" y="370" font-size="19" font-weight="700" text-anchor="start" fill="#192e3c">原模板</text>
+<text x="148" y="396" font-size="19" font-weight="400" text-anchor="start" fill="#48606b">T</text>
+<text x="56" y="453" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">同一位置局部放大</text>
+<text x="56" y="476" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">开发图 77000000</text>
+<path d="M245 350 H266 M266 237 V474" fill="none" stroke="#a6b7bd" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M266 237 H288" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<path d="M266 346 H288" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<path d="M266 474 H288" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<path d="M811 237 H842 V474 H811 M811 346 H842" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="290" y="190" width="521" height="94" rx="9" fill="#f0f4f5" stroke="#acbcc4" stroke-width="1.7"/>
+<rect x="290" y="297" width="521" height="103" rx="9" fill="#e8f5ef" stroke="#4d9c8d" stroke-width="1.7"/>
+<rect x="290" y="413" width="521" height="126" rx="9" fill="#fbf0e4" stroke="#c18b59" stroke-width="1.7"/>
+<image x="721" y="202" width="70" height="70" xlink:href="data:image/png;base64,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"/>
+<rect x="721" y="202" width="70" height="70" rx="0" fill="none" stroke="#97a8ad" stroke-width="1"/>
+<image x="721" y="312" width="72" height="72" xlink:href="data:image/png;base64,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"/>
+<rect x="721" y="312" width="72" height="72" rx="0" fill="none" stroke="#97a8ad" stroke-width="1"/>
+<image x="721" y="441" width="72" height="72" xlink:href="data:image/png;base64,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"/>
+<rect x="721" y="441" width="72" height="72" rx="0" fill="none" stroke="#97a8ad" stroke-width="1"/>
+<text x="310" y="227" font-size="25" font-weight="700" text-anchor="start" fill="#385568">A　直接差分</text>
+<text x="310" y="262" font-size="19" font-weight="400" text-anchor="start" fill="#192e3c">逐像素取待检图与原模板的绝对差。</text>
+<text x="310" y="334" font-size="25" font-weight="700" text-anchor="start" fill="#006b61">B　先做全局平移校正</text>
+<text x="310" y="365" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">用相位相关估计模板位移，再计算绝对差。</text>
+<text x="310" y="388" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">整张模板使用同一个平移量。</text>
+<text x="310" y="448" font-size="24" font-weight="700" text-anchor="start" fill="#9c4e17">B′　再用环形邻域逐像素选择</text>
+<text x="310" y="479" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">周边平均残差下降超过 2 灰度级，</text>
+<text x="310" y="505" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">该像素取校正差值，否则取原差值。</text>
+<rect x="654" y="461" width="47" height="47" rx="0" fill="#dfb47e" stroke="#9c4e17" stroke-width="1.3"/>
+<rect x="669.6666666666666" y="476.6666666666667" width="15.666666666666666" height="15.666666666666666" rx="0" fill="#fbf0e4" stroke="#9c4e17" stroke-width="1"/>
+<text x="310" y="528" font-size="15" font-weight="400" text-anchor="start" fill="#9c4e17">方环：15×15 外窗，剔除中心 5×5。</text>
+<text x="290" y="568" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">右侧为同一局部的实际残差，三图共用 0–255 灰度。</text>
+<rect x="878" y="238" width="210" height="197" rx="8" fill="white" stroke="#b8c6c9" stroke-width="1"/>
+<text x="898" y="271" font-size="21" font-weight="700" text-anchor="start" fill="#192e3c">RGB 三通道</text>
+<rect x="890" y="285" width="186" height="34" rx="4" fill="#eff3f3" stroke="none" stroke-width="1"/>
+<text x="904" y="309" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">R　待检图 I</text>
+<rect x="890" y="327" width="186" height="34" rx="4" fill="#eff3f3" stroke="none" stroke-width="1"/>
+<text x="904" y="351" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">G　原模板 T</text>
+<rect x="890" y="369" width="186" height="34" rx="4" fill="#d8eee6" stroke="none" stroke-width="1"/>
+<text x="904" y="393" font-size="18" font-weight="700" text-anchor="start" fill="#006b61">B　所选残差</text>
+<path d="M842 386 H888" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<text x="898" y="424" font-size="15" font-weight="400" text-anchor="start" fill="#48606b">3 × 640 × 640</text>
+<text x="878" y="468" font-size="17" font-weight="700" text-anchor="start" fill="#006b61">校正只用于计算残差。</text>
+<text x="878" y="495" font-size="17" font-weight="400" text-anchor="start" fill="#48606b">第二通道保留原模板。</text>
+<path d="M1088 335 H1113 V236 H1138" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<rect x="1140" y="194" width="352" height="84" rx="8" fill="#f0f4f5" stroke="#bccad0" stroke-width="1"/>
+<text x="1158" y="227" font-size="22" font-weight="700" text-anchor="start" fill="#192e3c">Backbone　骨干</text>
+<text x="1158" y="255" font-size="18" font-weight="400" text-anchor="start" fill="#48606b">第 0 层 Conv 接收三通道输入</text>
+<path d="M1316 278 V298" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<rect x="1140" y="300" width="352" height="98" rx="8" fill="#f0f4f5" stroke="#bccad0" stroke-width="1"/>
+<text x="1158" y="333" font-size="21" font-weight="700" text-anchor="start" fill="#192e3c">Neck　多尺度特征融合</text>
+<rect x="1158" y="346" width="96" height="38" rx="4" fill="#e1eaec" stroke="none" stroke-width="1"/>
+<text x="1206" y="364" font-size="15" font-weight="700" text-anchor="middle" fill="#385568">P3 / 8</text>
+<text x="1206" y="380" font-size="13" font-weight="400" text-anchor="middle" fill="#385568">层 16</text>
+<rect x="1265" y="346" width="96" height="38" rx="4" fill="#e1eaec" stroke="none" stroke-width="1"/>
+<text x="1313" y="364" font-size="15" font-weight="700" text-anchor="middle" fill="#385568">P4 / 16</text>
+<text x="1313" y="380" font-size="13" font-weight="400" text-anchor="middle" fill="#385568">层 19</text>
+<rect x="1372" y="346" width="96" height="38" rx="4" fill="#e1eaec" stroke="none" stroke-width="1"/>
+<text x="1420" y="364" font-size="15" font-weight="700" text-anchor="middle" fill="#385568">P5 / 32</text>
+<text x="1420" y="380" font-size="13" font-weight="400" text-anchor="middle" fill="#385568">层 22</text>
+<path d="M1316 398 V418" fill="none" stroke="#62808a" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#tip)"/>
+<rect x="1140" y="420" width="352" height="88" rx="8" fill="#f0f4f5" stroke="#bccad0" stroke-width="1"/>
+<text x="1158" y="455" font-size="22" font-weight="700" text-anchor="start" fill="#192e3c">Detect　检测头</text>
+<text x="1158" y="484" font-size="17" font-weight="400" text-anchor="start" fill="#48606b">第 23 层 → 解码 → 六类水平框</text>
+<text x="1140" y="542" font-size="17" font-weight="400" text-anchor="start" fill="#48606b">各组结构相同，权重分别训练。</text>
+<path d="M42 596 H1492" fill="none" stroke="#bdcdc9" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="42" y="638" font-size="29" font-weight="700" text-anchor="start" fill="#192e3c">模板右移 2 px 时的实测结果</text>
+<text x="1492" y="636" font-size="18" font-weight="400" text-anchor="end" fill="#48606b">500 张测试图　·　置信度 0.30　·　匹配 IoU ≥ 0.50　·　单种子</text>
+<rect x="42" y="663" width="685" height="38" rx="5" fill="#e5eceb" stroke="none" stroke-width="1"/>
+<text x="58" y="689" font-size="18" font-weight="700" text-anchor="start" fill="#192e3c">实验组</text>
+<text x="518" y="689" font-size="18" font-weight="700" text-anchor="end" fill="#192e3c">误报数 ↓</text>
+<text x="708" y="689" font-size="18" font-weight="700" text-anchor="end" fill="#192e3c">小缺陷检出数 ↑</text>
+<rect x="42" y="701" width="685" height="34" rx="0" fill="white" stroke="none" stroke-width="1"/>
+<text x="58" y="725" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">单图基线</text>
+<text x="273" y="725" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">single</text>
+<text x="518" y="725" font-size="20" font-weight="400" text-anchor="end" fill="#192e3c">403</text>
+<text x="708" y="725" font-size="19" font-weight="700" text-anchor="end" fill="#192e3c">620 / 643</text>
+<path d="M42 735 H727" fill="none" stroke="#d6e0de" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="42" y="735" width="685" height="34" rx="0" fill="white" stroke="none" stroke-width="1"/>
+<text x="58" y="759" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">A　直接差分</text>
+<text x="273" y="759" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">raw</text>
+<text x="518" y="759" font-size="20" font-weight="400" text-anchor="end" fill="#192e3c">499</text>
+<text x="708" y="759" font-size="19" font-weight="400" text-anchor="end" fill="#192e3c">534 / 643</text>
+<path d="M42 769 H727" fill="none" stroke="#d6e0de" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="42" y="769" width="685" height="34" rx="0" fill="#e8f5ef" stroke="none" stroke-width="1"/>
+<text x="58" y="793" font-size="18" font-weight="700" text-anchor="start" fill="#006b61">B　全局校正</text>
+<text x="273" y="793" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">aligned</text>
+<text x="518" y="793" font-size="20" font-weight="700" text-anchor="end" fill="#006b61">324</text>
+<text x="708" y="793" font-size="19" font-weight="400" text-anchor="end" fill="#006b61">549 / 643</text>
+<path d="M42 803 H727" fill="none" stroke="#d6e0de" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="42" y="803" width="685" height="34" rx="0" fill="#fbf0e4" stroke="none" stroke-width="1"/>
+<text x="58" y="827" font-size="18" font-weight="700" text-anchor="start" fill="#9c4e17">B′　环形判据</text>
+<text x="273" y="827" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">ring</text>
+<text x="518" y="827" font-size="20" font-weight="400" text-anchor="end" fill="#9c4e17">460</text>
+<text x="708" y="827" font-size="19" font-weight="400" text-anchor="end" fill="#9c4e17">540 / 643</text>
+<path d="M42 837 H727" fill="none" stroke="#d6e0de" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="42" y="837" width="685" height="34" rx="0" fill="white" stroke="none" stroke-width="1"/>
+<text x="58" y="861" font-size="18" font-weight="400" text-anchor="start" fill="#192e3c">实心窗口消融</text>
+<text x="273" y="861" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">solid</text>
+<text x="518" y="861" font-size="20" font-weight="400" text-anchor="end" fill="#192e3c">497</text>
+<text x="708" y="861" font-size="19" font-weight="400" text-anchor="end" fill="#192e3c">505 / 643</text>
+<path d="M42 871 H727" fill="none" stroke="#d6e0de" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="759" y="663" width="733" height="95" rx="8" fill="#e8f5ef" stroke="none" stroke-width="1"/>
+<rect x="759" y="663" width="5" height="95" rx="2" fill="#006b61" stroke="none" stroke-width="1"/>
+<text x="783" y="693" font-size="19" font-weight="700" text-anchor="start" fill="#006b61">A → B　全局校正相对直接差分</text>
+<text x="783" y="735" font-size="31" font-weight="700" text-anchor="start" fill="#006b61">误报少 175 个</text>
+<text x="1070" y="735" font-size="25" font-weight="700" text-anchor="start" fill="#192e3c">小缺陷多检出 15 个</text>
+<rect x="759" y="776" width="733" height="95" rx="8" fill="#fbf0e4" stroke="none" stroke-width="1"/>
+<rect x="759" y="776" width="5" height="95" rx="2" fill="#9c4e17" stroke="none" stroke-width="1"/>
+<text x="783" y="806" font-size="19" font-weight="700" text-anchor="start" fill="#9c4e17">B → B′　环形判据相对全局校正</text>
+<text x="783" y="848" font-size="31" font-weight="700" text-anchor="start" fill="#9c4e17">误报多 136 个</text>
+<text x="1070" y="848" font-size="25" font-weight="700" text-anchor="start" fill="#192e3c">小缺陷少检出 9 个</text>
+<text x="42" y="907" font-size="16" font-weight="400" text-anchor="start" fill="#48606b">小缺陷按训练集面积下四分位数定义（≤ 952 px²）。各组训练 30 轮；相同工作点统计误报和检出数。</text>
+</g></svg>

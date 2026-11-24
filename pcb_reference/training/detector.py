@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-from . import ROOT
+from .. import ROOT
 
 
 def train(arm, seed):
@@ -16,6 +16,7 @@ def train(arm, seed):
         epochs=30,
         imgsz=640,
         batch=8,
+        workers=2,
         optimizer="SGD",
         seed=seed,
         deterministic=True,

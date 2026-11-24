@@ -6,8 +6,8 @@ import cv2
 import yaml
 
 from .deeppcb import CLASSES, iter_samples, read_boxes
-from .inputs import make_input
-from .registration import translate
+from ..methods import make_input
+from ..methods.aligned.registration import translate
 
 
 def convert_labels(path, width, height):
