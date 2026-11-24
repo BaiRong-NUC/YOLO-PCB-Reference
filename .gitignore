@@ -1,0 +1,7 @@
+data/
+runs/
+weights/
+outputs/
+__pycache__/
+.pytest_cache/
+*.pt
